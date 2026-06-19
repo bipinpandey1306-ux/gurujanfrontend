@@ -9,7 +9,7 @@ interface AuthState {
   isAuthenticated: boolean;
   error: string | null;
   login: (email?: string, password?: string, isSuperadminGate?: boolean) => Promise<void>;
-  register: (name: string, email: string, password: string, bio: string) => Promise<boolean>;
+  register: (name: string, email: string, password: string, bio: string, passcode: string) => Promise<boolean>;
   logout: () => Promise<void>;
   clearError: () => void;
 }
@@ -128,7 +128,7 @@ export function useAuth(): AuthState {
     }
   }, []);
 
-  const register = useCallback(async (name: string, email: string, password: string, bio: string): Promise<boolean> => {
+  const register = useCallback(async (name: string, email: string, password: string, bio: string, passcode: string): Promise<boolean> => {
     setIsLoading(true);
     setError(null);
 
@@ -136,7 +136,7 @@ export function useAuth(): AuthState {
       const res = await fetch(`${baseUrl}/api/auth/register`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, email, password, bio })
+        body: JSON.stringify({ name, email, password, bio, passcode })
       });
 
       const data = await res.json();
